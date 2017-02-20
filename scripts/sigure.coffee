@@ -16,13 +16,23 @@ module.exports = (robot) ->
 #    robot.send test, message
 #  , 5000
 
-  msgs = [
-    "ワカリマシタ。ネボウデスネ？",
-    "エ？イマオキタノ？？",
-    "ワカリマシタ。ゴジアイクダサイマセ。",
-    "デンシャガチエンシテルンジャナイ。ヲマエガチエンシテルンダ。",
-    "ナブチサン、オキテクダサイ"
-  ]
+  testAction = (msg) ->
+    msg.send msg.random [
+      "ワカリマシタ。ネボウデスネ？",
+      "エ？イマオキタノ？？",
+      "ワカリマシタ。ゴジアイクダサイマセ。",
+      "デンシャガチエンシテルンジャナイ。ヲマエガチエンシテルンダ。",
+      "ナブチサン、オキテクダサイ"
+    ]
 
-  robot.hear /.*/, (msg) ->
-    msg.send msg.random msgs
+  healthAction = (msg) ->
+    msg.send "しあわせはいつもじぶんのこころがきめる　のぞみ"
+
+  # main
+  robot.hear /(sigure|しぐれ|シグレ|時雨) (.*)$/, (msg) ->
+    args = msg.match[2].split(' ')
+
+    switch args[0]
+      when "test", "テスト" then testAction(msg)
+      when "health", "元気？" then healthAction(msg)
+      else msg.send "There are no function for the description: \"#{msg.match[2]}\"."
